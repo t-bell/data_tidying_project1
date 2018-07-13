@@ -1,6 +1,6 @@
 ---
 title: "Data Tidying Project"
-author: "Jane Doe"
+author: "Tiana Bell"
 date: "6/13/2018"
 output: html_document
 ---
