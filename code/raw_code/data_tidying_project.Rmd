@@ -55,6 +55,8 @@ df_department.rds <- readRDS("df1.rds")
 df_retail.rds <- readRDS("df2.rds")
 ```
 
+In this code chunk I am storing/saving the data objects under different file names and also saving them in a different folder location. The objects moved from folder '/code/raw_code/' to 'data/raw_data'.
+
 ### Wrangle Data
 
 ```{r wrangle-df2, warning=FALSE} 
@@ -77,6 +79,7 @@ df_retail <- df2 %>%
   filter(business == "Retail sales, total "| business=="Department stores ")
 ```
 
+In this example code chunk we are manipulating the data to create a new column and a dataset. The current code will have added a new 'business' column and then manipulated the data do that only Retail and Department stores are showing. 
 
 ```{r wrangle-df1, warning=FALSE} 
 ## now, your turn!
@@ -102,10 +105,15 @@ df_department <- df1 %>%
   df1[,order(colnames(df1),decreasing=TRUE)]
 ```
 
+This code chunk has added the new columns: value and business. Unfortunately I still need help so the plots may or may not appear once knitting this document. :( sad face lol.
+
+
 ```{r merge-data, warning=FALSE} 
 ## Now, combine the two data frames
 df_total <- merge(df1, df2)
 ```
+
+Merging the two data frames.
 
 ```{r plot, warning=FALSE, fig.width=10} 
 ## Plot Retail Sales data
