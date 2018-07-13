@@ -89,20 +89,19 @@ df_department <- df1 %>%
   separate(Period, into = c('month','year'), extra = 'drop', remove = FALSE) %>%
   ## add a column `value` which contains the 
   ## information from the `Value (in millions)` 
-  mutate(`value` = gsub("[…]|[.]","",`Value (in millions)`)) %>%
+  mutate(value = `Value (in millions)`) %>%
   ## group the data frame by the `year` column
-  group_by(df1, year) %>%
+  group_by(year) %>%
   ## Summarize the data by creating a new column
   ## call this column `n` 
   ## have it contain the sum of the `value` column
-  n <- summarize(mutate(df1, sum('value'))) %>% 
+  summarize(n = sum(value)) %>% 
   ### create a new column called `business`
   ## set the value of this column to  be "department stores" 
   ## for the entire data set 
-  mutate(business = gsub("[…]|[.]","",`Kind of business`)) %>%
-  select(grepl('value, total |Department stores', business))       
+  mutate(business = "department stores") %>%
   ## reorder column names
-  df1[,order(colnames(df1),decreasing=TRUE)]
+  select(business, year, n)
 ```
 
 This code chunk has added the new columns: value and business. Unfortunately I still need help so the plots may or may not appear once knitting this document. :( sad face lol.
@@ -110,7 +109,7 @@ This code chunk has added the new columns: value and business. Unfortunately I s
 
 ```{r merge-data, warning=FALSE} 
 ## Now, combine the two data frames
-df_total <- merge(df1, df2)
+df_total <- merge(df_department, df_retail)
 ```
 
 Merging the two data frames.
