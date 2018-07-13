@@ -39,6 +39,7 @@ df1 <- read_excel(tf)
 #2009-2014
 # https://data.world/garyhoov/retail-sales-growth
 GET("https://query.data.world/s/py7kinxvyuxjpzwdjs2ti4wdmui6bi", write_disk(tf <- tempfile(fileext = ".xls")))
+
 df2 <- read_excel(tf)
 ## the the first row and make that the column names of the data frame
 colnames(df2) <- df2[1,]
@@ -48,8 +49,10 @@ colnames(df2) <- df2[1,]
 
 ```{r save-data, warning=FALSE} 
 ## use saveRDS() to save each object as a .rds file 
-
-
+saveRDS(df1, file = "df1.rds")
+saveRDS(df2, file = "df2.rds")
+df_department.rds <- readRDS("df1.rds")
+df_retail.rds <- readRDS("df2.rds")
 ```
 
 ### Wrangle Data
@@ -74,32 +77,34 @@ df_retail <- df2 %>%
   filter(business == "Retail sales, total "| business=="Department stores ")
 ```
 
+
 ```{r wrangle-df1, warning=FALSE} 
 ## now, your turn!
 ## work with df1
 df_department <- df1 %>% 
   ## split Period column into one column called "month" and one called "year"
-  function_name() %>%
+  separate(Period, into = c('month','year'), extra = 'drop', remove = FALSE) %>%
   ## add a column `value` which contains the 
   ## information from the `Value (in millions)` 
-  function_name() %>%
+  mutate(`value` = gsub("[…]|[.]","",`Value (in millions)`)) %>%
   ## group the data frame by the `year` column
-  function_name() %>%
+  group_by(df1, year) %>%
   ## Summarize the data by creating a new column
   ## call this column `n` 
   ## have it contain the sum of the `value` column
-  function_name() %>% 
+  n <- summarize(mutate(df1, sum('value'))) %>% 
   ### create a new column called `business`
   ## set the value of this column to  be "department stores" 
   ## for the entire data set 
-  function_name() %>%
+  mutate(business = gsub("[…]|[.]","",`Kind of business`)) %>%
+  select(grepl('value, total |Department stores', business))       
   ## reorder column names
-  function_name()
+  df1[,order(colnames(df1),decreasing=TRUE)]
 ```
 
 ```{r merge-data, warning=FALSE} 
 ## Now, combine the two data frames
-df_total <- function_name()
+df_total <- merge(df1, df2)
 ```
 
 ```{r plot, warning=FALSE, fig.width=10} 
